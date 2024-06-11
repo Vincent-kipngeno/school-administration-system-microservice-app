@@ -1,4 +1,4 @@
-package com.sas.users.user.entity;
+package com.sas.users.user;
 
 import com.sas.clients.users.Role;
 import lombok.AllArgsConstructor;

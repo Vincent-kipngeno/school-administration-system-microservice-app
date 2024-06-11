@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sas.clients.users.Role;
-import com.sas.users.user.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;

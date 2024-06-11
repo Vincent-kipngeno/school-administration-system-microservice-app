@@ -4,7 +4,7 @@ import com.mongodb.DuplicateKeyException;
 import com.sas.exception.dto.EmailAlreadyExistsException;
 import com.sas.users.config.JwtService;
 import com.sas.clients.users.Role;
-import com.sas.users.user.entity.User;
+import com.sas.users.user.User;
 import com.sas.users.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
