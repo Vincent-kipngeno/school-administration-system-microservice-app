@@ -1,6 +1,7 @@
 package com.sas.users.auth;
 
 import com.mongodb.DuplicateKeyException;
+import com.sas.exception.dto.EmailAlreadyExistsException;
 import com.sas.users.config.JwtService;
 import com.sas.clients.users.Role;
 import com.sas.users.user.entity.User;
@@ -20,7 +21,7 @@ public class AuthenticationService {
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 
-	public AuthenticationResponse register(RegisterRequest request) throws Exception {
+	public AuthenticationResponse register(RegisterRequest request) {
 		User user = User.builder()
 				.firstname(request.getFirstname())
 				.lastname(request.getLastname())
@@ -36,7 +37,7 @@ public class AuthenticationService {
 					.token(jwtToken)
 					.build();
 		} catch (DuplicateKeyException e) {
-			throw new Exception("Email already exists");
+			throw new EmailAlreadyExistsException("Email already exists");
 		}
 
 	}

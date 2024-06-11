@@ -2,7 +2,9 @@ package com.sas.exception.advice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sas.exception.dto.CustomErrorException;
 import com.sas.exception.dto.CustomErrorResponse;
+import com.sas.exception.dto.EmailAlreadyExistsException;
 import com.sas.exception.dto.GlobalErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -32,8 +34,19 @@ public class ServiceGlobalExceptionHandler {
         return ResponseEntity.internalServerError().body(errorResponse);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> handleRuntimeException(RuntimeException exception) throws JsonProcessingException {
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<?> handleEmailExistsException(EmailAlreadyExistsException exception) {
+        CustomErrorResponse errorResponse = CustomErrorResponse.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .errorCode(globalErrorCode.EMAIL_ALREADY_EXISTS)
+                .errorMessage(exception.getMessage())
+                .build();
+        log.error("ServiceGlobalExceptionHandler::handleEmailExistsException exception caught {}", exception.getMessage());
+        return ResponseEntity.internalServerError().body(errorResponse);
+    }
+
+    @ExceptionHandler(CustomErrorException.class)
+    public ResponseEntity<?> handleCustomException(CustomErrorException exception) throws JsonProcessingException {
         CustomErrorResponse errorResponse = new ObjectMapper().readValue(exception.getMessage(), CustomErrorResponse.class);
         log.error("ServiceGlobalExceptionHandler::handleRuntimeException exception caught {}", exception.getMessage());
         return ResponseEntity.internalServerError().body(errorResponse);

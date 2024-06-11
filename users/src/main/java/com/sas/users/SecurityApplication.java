@@ -11,6 +11,7 @@ import org.springframework.context.annotation.PropertySources;
 		scanBasePackages = {
 				"com.sas.users",
 				"com.sas.amqp",
+				"com.sas.exception.advice",
 		}
 )
 @EnableDiscoveryClient
