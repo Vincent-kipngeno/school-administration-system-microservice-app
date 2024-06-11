@@ -1,4 +1,4 @@
-package com.sas.users.user;
+package com.sas.clients.users;
 
 public enum Role {
 	

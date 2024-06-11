@@ -18,7 +18,8 @@ import org.springframework.context.annotation.PropertySources;
 		basePackages = "com.sas.clients"
 )
 @PropertySources({
-		@PropertySource("classpath:clients-${spring.profiles.active}.properties")
+		@PropertySource("classpath:clients-${spring.profiles.active}.properties"),
+		@PropertySource("classpath:exception.properties")
 })
 public class SecurityApplication {
 

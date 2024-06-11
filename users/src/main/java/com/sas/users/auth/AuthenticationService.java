@@ -1,8 +1,9 @@
 package com.sas.users.auth;
 
+import com.mongodb.DuplicateKeyException;
 import com.sas.users.config.JwtService;
-import com.sas.users.user.Role;
-import com.sas.users.user.User;
+import com.sas.clients.users.Role;
+import com.sas.users.user.entity.User;
 import com.sas.users.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +20,7 @@ public class AuthenticationService {
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 
-	public AuthenticationResponse register(RegisterRequest request) {
+	public AuthenticationResponse register(RegisterRequest request) throws Exception {
 		User user = User.builder()
 				.firstname(request.getFirstname())
 				.lastname(request.getLastname())
@@ -27,11 +28,17 @@ public class AuthenticationService {
 				.password(passwordEncoder.encode(request.getPassword()))
 				.role(Role.STUDENT)
 				.build();
-		repository.save(user);
-		var jwtToken = jwtService.generateToken(user);
-		return AuthenticationResponse.builder()
-				.token(jwtToken)
-				.build();
+
+		try {
+			repository.save(user);
+			var jwtToken = jwtService.generateToken(user);
+			return AuthenticationResponse.builder()
+					.token(jwtToken)
+					.build();
+		} catch (DuplicateKeyException e) {
+			throw new Exception("Email already exists");
+		}
+
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
