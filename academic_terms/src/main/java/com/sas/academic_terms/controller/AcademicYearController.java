@@ -8,6 +8,8 @@ import com.sas.academic_terms.service.AcademicYearTermService;
 import com.sas.academic_terms.service.AcademicTermService;
 import com.sas.academic_terms.service.AcademicYearService;
 import com.sas.clients.ResponseDTO;
+import com.sas.clients.academic_terms.AcademicTermResponse;
+import com.sas.clients.academic_terms.AcademicYearResponse;
 import com.sas.clients.academic_terms.AcademicYearTermResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +37,10 @@ public class AcademicYearController {
     public ResponseEntity<ResponseDTO<Object>> addAcademicYear(@RequestBody AcademicYearRequest request) {
         Long academicYearId = academicYearService.addAcademicYear(request);
         return ResponseEntity.ok(
-                responseDTO(null, "Academic year added with ID: " + academicYearId)
+                responseDTO(
+                        null,
+                        "Academic year added with ID: " + academicYearId
+                )
         );
     }
 
@@ -50,9 +55,13 @@ public class AcademicYearController {
     }
 
     @GetMapping("/academicYears")
-    public ResponseEntity<List<AcademicYear>> getAllAcademicYears() {
-        List<AcademicYear> academicYears = academicYearService.getAllAcademicYears();
-        return ResponseEntity.ok(academicYears);
+    public ResponseEntity<ResponseDTO<List<AcademicYearResponse>>> getAllAcademicYears() {
+        return ResponseEntity.ok(
+                responseDTO(
+                        academicYearService.getAllAcademicYears(),
+                        "List of academic years."
+                )
+        );
     }
 
     @GetMapping("/a_YearTerms")
@@ -76,15 +85,23 @@ public class AcademicYearController {
     }
 
     @GetMapping("/academicYear/{id}")
-    public ResponseEntity<AcademicYear> getAcademicYearById(@PathVariable Integer id) {
-        AcademicYear academicYear = academicYearService.getAcademicYearById(id);
-        return ResponseEntity.ok(academicYear);
+    public ResponseEntity<ResponseDTO<AcademicYearResponse>> getAcademicYearById(@PathVariable Integer id) {
+        return ResponseEntity.ok(
+                responseDTO(
+                        academicYearService.getAcademicYearById(id),
+                        "Academic year terms returned successfully"
+                )
+        );
     }
 
     @GetMapping("/academicTerm/{id}")
-    public ResponseEntity<AcademicTerm> getAcademicTermById(@PathVariable Integer id) {
-        AcademicTerm academicTerm = academicTermService.getAcademicTermById(id);
-        return ResponseEntity.ok(academicTerm);
+    public ResponseEntity<ResponseDTO<AcademicTermResponse>> getAcademicTermById(@PathVariable Integer id) {
+        return ResponseEntity.ok(
+                responseDTO(
+                        academicTermService.getAcademicTermById(id),
+                        "Academic term returned successfully"
+                )
+        );
     }
 
     public <T> ResponseDTO<T> responseDTO(T response, String message) {
