@@ -13,10 +13,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "a_year_term")
-public class A_YearTerm {
+public class AcademicYearTerm {
 
     @EmbeddedId
-    private A_YearTermId id;
+    private AcademicYearTermId id;
 
     @ManyToOne
     @MapsId("yearId")

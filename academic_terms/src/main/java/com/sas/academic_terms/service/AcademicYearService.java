@@ -2,13 +2,11 @@ package com.sas.academic_terms.service;
 
 import com.sas.academic_terms.dto.AcademicYearRequest;
 import com.sas.academic_terms.dto.AcademicYearTermRequest;
-import com.sas.academic_terms.entity.A_YearTerm;
-import com.sas.academic_terms.entity.A_YearTermId;
+import com.sas.academic_terms.entity.AcademicYearTerm;
 import com.sas.academic_terms.entity.AcademicTerm;
 import com.sas.academic_terms.entity.AcademicYear;
-import com.sas.academic_terms.repository.A_YearTermRepository;
-import com.sas.academic_terms.repository.AcademicTermRepository;
 import com.sas.academic_terms.repository.AcademicYearRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +15,12 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class AcademicYearService {
 
-    @Autowired
-    private AcademicYearRepository academicYearRepository;
-
-    @Autowired
-    private AcademicTermService academicTermService;
-
-    @Autowired
-    private A_YearTermService aYearTermService;
+    private final AcademicYearRepository academicYearRepository;
+    private final AcademicTermService academicTermService;
+    private final AcademicYearTermService aYearTermService;
 
 
     public Long addAcademicYear(AcademicYearRequest request) {
@@ -41,7 +35,7 @@ public class AcademicYearService {
         // Save the terms for the academic year
         for (AcademicYearTermRequest termRequest : request.terms()) {
             AcademicTerm academicTerm = academicTermService.getAcademicTermById(termRequest.termId());
-            A_YearTerm aYearTerm = A_YearTerm.builder()
+            AcademicYearTerm aYearTerm = AcademicYearTerm.builder()
                     .year(academicYear)
                     .term(academicTerm)
                     .startDate(termRequest.startDate())

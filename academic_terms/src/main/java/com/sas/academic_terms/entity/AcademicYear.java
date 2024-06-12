@@ -36,5 +36,5 @@ public class AcademicYear {
     private Date endDate;
 
     @OneToMany(mappedBy = "year")
-    private List<A_YearTerm> yearTerms;
+    private List<AcademicYearTerm> yearTerms;
 }

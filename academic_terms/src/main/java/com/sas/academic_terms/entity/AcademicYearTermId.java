@@ -14,7 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class A_YearTermId implements Serializable {
+public class AcademicYearTermId implements Serializable {
     @Column(name = "year_id")
     private Integer yearId;
 

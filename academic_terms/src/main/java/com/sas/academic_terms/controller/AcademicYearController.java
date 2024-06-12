@@ -1,16 +1,21 @@
 package com.sas.academic_terms.controller;
 
 import com.sas.academic_terms.dto.AcademicYearRequest;
-import com.sas.academic_terms.entity.A_YearTerm;
+import com.sas.academic_terms.entity.AcademicYearTerm;
 import com.sas.academic_terms.entity.AcademicTerm;
 import com.sas.academic_terms.entity.AcademicYear;
-import com.sas.academic_terms.service.A_YearTermService;
+import com.sas.academic_terms.service.AcademicYearTermService;
 import com.sas.academic_terms.service.AcademicTermService;
 import com.sas.academic_terms.service.AcademicYearService;
+import com.sas.clients.ResponseDTO;
+import com.sas.clients.academic_terms.AcademicYearTermResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -21,22 +26,27 @@ public class AcademicYearController {
     private AcademicYearService academicYearService;
 
     @Autowired
-    private A_YearTermService aYearTermService;
+    private AcademicYearTermService academicYearTermService;
 
     @Autowired
     private AcademicTermService academicTermService;
 
     @PostMapping
-    public ResponseEntity<String> addAcademicYear(@RequestBody AcademicYearRequest request) {
-        // Call the service method to add the academic year and its terms
+    public ResponseEntity<ResponseDTO<Object>> addAcademicYear(@RequestBody AcademicYearRequest request) {
         Long academicYearId = academicYearService.addAcademicYear(request);
-        return ResponseEntity.ok("Academic year added with ID: " + academicYearId);
+        return ResponseEntity.ok(
+                responseDTO(null, "Academic year added with ID: " + academicYearId)
+        );
     }
 
     @GetMapping("/currentA_YearTerm")
-    public ResponseEntity<A_YearTerm> getCurrentA_YearTerm() {
-        A_YearTerm currentA_YearTerm = aYearTermService.getCurrentA_YearTerm();
-        return ResponseEntity.ok(currentA_YearTerm);
+    public ResponseEntity<ResponseDTO<AcademicYearTermResponse>> getCurrentAcademicYearTerm() {
+        return ResponseEntity.ok(
+                responseDTO(
+                        academicYearTermService.getCurrentAcademicYearTerm(),
+                        "Current academic year term returned successfully"
+                )
+        );
     }
 
     @GetMapping("/academicYears")
@@ -46,15 +56,23 @@ public class AcademicYearController {
     }
 
     @GetMapping("/a_YearTerms")
-    public ResponseEntity<List<A_YearTerm>> getAllA_YearTerms() {
-        List<A_YearTerm> a_YearTerms = aYearTermService.getAllA_YearTerms();
-        return ResponseEntity.ok(a_YearTerms);
+    public ResponseEntity<ResponseDTO<List<AcademicYearTermResponse>>> getAllAcademicYearTerms() {
+        return ResponseEntity.ok(
+                responseDTO(
+                        academicYearTermService.getAllAcademicYearTerms(),
+                        "Academic year terms returned successfully"
+                )
+        );
     }
 
     @GetMapping("/a_YearTerm/{yearId}/{termId}")
-    public ResponseEntity<A_YearTerm> getA_YearTermById(@PathVariable Integer yearId, @PathVariable Integer termId) {
-        A_YearTerm a_YearTerm = aYearTermService.getA_YearTermById(yearId, termId);
-        return ResponseEntity.ok(a_YearTerm);
+    public ResponseEntity<ResponseDTO<AcademicYearTermResponse>> getAcademicYearTermById(@PathVariable Integer yearId, @PathVariable Integer termId) {
+        return ResponseEntity.ok(
+                responseDTO(
+                        academicYearTermService.getAcademicYearTermById(yearId, termId),
+                        "Academic year term returned successfully."
+                )
+        );
     }
 
     @GetMapping("/academicYear/{id}")
@@ -67,6 +85,16 @@ public class AcademicYearController {
     public ResponseEntity<AcademicTerm> getAcademicTermById(@PathVariable Integer id) {
         AcademicTerm academicTerm = academicTermService.getAcademicTermById(id);
         return ResponseEntity.ok(academicTerm);
+    }
+
+    public <T> ResponseDTO<T> responseDTO(T response, String message) {
+        return ResponseDTO.<T>builder()
+                .statusCode(HttpStatus.OK.value())
+                .status(HttpStatus.OK.getReasonPhrase())
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .body(response)
+                .build();
     }
 }
 

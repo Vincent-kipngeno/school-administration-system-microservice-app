@@ -10,13 +10,11 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class ResponseDTO {
+public class ResponseDTO<T> {
 
     private int statusCode;
     private String status;
     private String message;
     private LocalDateTime timestamp;
-    private Object body;
-
+    private T body;
 }

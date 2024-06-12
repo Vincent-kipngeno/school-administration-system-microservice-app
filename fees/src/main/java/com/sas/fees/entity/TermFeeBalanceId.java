@@ -15,8 +15,11 @@ import java.util.Objects;
 @Embeddable
 public class TermFeeBalanceId implements Serializable {
     @Column(name = "stud_id")
-    private int studId;
+    private String studId;
 
-    @Column(name = "ay_term_id")
-    private int ayTermId;
+    @Column(name = "year_id")
+    private Integer yearId;
+
+    @Column(name = "term_id")
+    private Integer termId;
 }

@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -30,6 +29,6 @@ public class AcademicTerm {
     private String name;
 
     @OneToMany(mappedBy = "term")
-    private List<A_YearTerm> terms;
+    private List<AcademicYearTerm> terms;
 }
 
