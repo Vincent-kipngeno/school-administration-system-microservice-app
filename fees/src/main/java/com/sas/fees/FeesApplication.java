@@ -1,4 +1,5 @@
-package com.sas.exams;
+package com.sas.fees;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,11 +24,10 @@ import org.springframework.context.annotation.PropertySources;
         @PropertySource("classpath:exception.properties"),
         @PropertySource("classpath:amqp.properties")
 })
-public class ExamsApplication {
+public class FeesApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ExamsApplication.class, args);
+        SpringApplication.run(FeesApplication.class, args);
     }
 
 }
-

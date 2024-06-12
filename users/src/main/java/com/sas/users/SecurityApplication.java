@@ -20,7 +20,8 @@ import org.springframework.context.annotation.PropertySources;
 )
 @PropertySources({
 		@PropertySource("classpath:clients-${spring.profiles.active}.properties"),
-		@PropertySource("classpath:exception.properties")
+		@PropertySource("classpath:exception.properties"),
+		@PropertySource("classpath:amqp.properties")
 })
 public class SecurityApplication {
 

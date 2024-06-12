@@ -1,7 +1,0 @@
-rabbitmq:
-  exchanges:
-    internal: internal.exchange
-  queues:
-    fees: fees.queue
-  routing-keys:
-    internal-fees: internal.fees.routing-key

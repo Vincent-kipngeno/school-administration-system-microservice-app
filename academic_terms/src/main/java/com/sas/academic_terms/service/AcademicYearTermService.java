@@ -7,6 +7,7 @@ import com.sas.amqp.RabbitMQMessageProducer;
 import com.sas.clients.ResponseDTO;
 import com.sas.clients.academic_terms.AcademicYearTermResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,14 @@ public class AcademicYearTermService {
 
     private final AcademicYearTermRepository academicYearTermRepository;
     private final RabbitMQMessageProducer rabbitMQMessageProducer;
+    @Value("${rabbitmq.exchanges.internal}")
+    private String internalExchange;
 
-    public AcademicYearTermResponse save(AcademicYearTerm aYearTerm) {
-        AcademicYearTerm savedTerm = academicYearTermRepository.saveAndFlush(aYearTerm);
-        return buildAcademicYearTermResponse(savedTerm);
+    @Value("${rabbitmq.routing-keys.internal-fees}")
+    private String internalFeesRoutingKey;
+
+    public void save(AcademicYearTerm aYearTerm) {
+        academicYearTermRepository.saveAndFlush(aYearTerm);
     }
 
     public AcademicYearTermResponse getCurrentAcademicYearTerm() {
@@ -61,8 +66,8 @@ public class AcademicYearTermService {
         // TODO: Send message to fees service to update fee arrears for new term
         rabbitMQMessageProducer.publish(
                 response,
-                "internal.exchange",
-                "internal.fees.routing-key"
+                internalExchange,
+                internalFeesRoutingKey
         );
 
         return nextAcademicYearTermResponse;
