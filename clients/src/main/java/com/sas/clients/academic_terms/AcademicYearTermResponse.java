@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AcademicYearTermResponse {
-    private Integer yearId;
+    private Long yearId;
     private Integer termId;
     private String year;
     private String term;

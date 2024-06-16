@@ -35,6 +35,6 @@ public class AcademicYear {
     @Column(name = "end_date")
     private Date endDate;
 
-    @OneToMany(mappedBy = "year")
+    @OneToMany(mappedBy = "year", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AcademicYearTerm> yearTerms;
 }

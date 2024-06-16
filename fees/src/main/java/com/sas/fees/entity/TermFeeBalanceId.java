@@ -18,7 +18,7 @@ public class TermFeeBalanceId implements Serializable {
     private String studId;
 
     @Column(name = "year_id")
-    private Integer yearId;
+    private Long yearId;
 
     @Column(name = "term_id")
     private Integer termId;

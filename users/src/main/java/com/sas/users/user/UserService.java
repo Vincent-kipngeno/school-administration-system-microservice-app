@@ -22,6 +22,7 @@ public class UserService {
                         .lastname(user.getLastname())
                         .email(user.getEmail())
                         .role(user.getRole())
+                        .gradeId(user.getGradeId())
                         .build())
                 .collect(Collectors.toList());
     }

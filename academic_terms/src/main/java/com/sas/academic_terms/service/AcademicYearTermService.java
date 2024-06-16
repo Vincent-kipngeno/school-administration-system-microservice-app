@@ -29,8 +29,8 @@ public class AcademicYearTermService {
     @Value("${rabbitmq.routing-keys.internal-fees}")
     private String internalFeesRoutingKey;
 
-    public void save(AcademicYearTerm aYearTerm) {
-        academicYearTermRepository.saveAndFlush(aYearTerm);
+    public AcademicYearTerm save(AcademicYearTerm aYearTerm) {
+        return academicYearTermRepository.saveAndFlush(aYearTerm);
     }
 
     public AcademicYearTermResponse getCurrentAcademicYearTerm() {
@@ -80,7 +80,7 @@ public class AcademicYearTermService {
                 .collect(Collectors.toList());
     }
 
-    public AcademicYearTermResponse getAcademicYearTermById(Integer yearId, Integer termId) {
+    public AcademicYearTermResponse getAcademicYearTermById(Long yearId, Integer termId) {
         AcademicYearTermId id = new AcademicYearTermId(yearId, termId);
         AcademicYearTerm term = academicYearTermRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("A_YearTerm not found"));

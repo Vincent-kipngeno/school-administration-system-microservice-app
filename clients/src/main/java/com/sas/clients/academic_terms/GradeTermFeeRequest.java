@@ -5,14 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AcademicTermResponse {
-    private Integer id;
-    private String name;
-    private List<AcademicYearTermResponse> terms;
+public class GradeTermFeeRequest {
+    private int gradeId;
+    private double fees;
 }

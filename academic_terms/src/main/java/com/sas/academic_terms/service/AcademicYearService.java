@@ -1,17 +1,24 @@
 package com.sas.academic_terms.service;
 
-import com.sas.academic_terms.dto.AcademicYearRequest;
-import com.sas.academic_terms.dto.AcademicYearTermRequest;
+import com.sas.academic_terms.entity.AcademicYearTermId;
+import com.sas.academic_terms.repository.AcademicYearTermRepository;
+import com.sas.clients.academic_terms.AcademicYearRequest;
+import com.sas.clients.academic_terms.AcademicYearTermRequest;
 import com.sas.academic_terms.entity.AcademicYearTerm;
 import com.sas.academic_terms.entity.AcademicTerm;
 import com.sas.academic_terms.entity.AcademicYear;
+import com.sas.academic_terms.repository.AcademicTermRepository;
 import com.sas.academic_terms.repository.AcademicYearRepository;
+import com.sas.amqp.RabbitMQMessageProducer;
+import com.sas.clients.ResponseDTO;
 import com.sas.clients.academic_terms.AcademicYearResponse;
 import com.sas.clients.academic_terms.AcademicYearTermResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -22,38 +29,63 @@ import java.util.stream.Collectors;
 public class AcademicYearService {
 
     private final AcademicYearRepository academicYearRepository;
-    private final AcademicTermService academicTermService;
-    private final AcademicYearTermService aYearTermService;
+    private final AcademicTermRepository academicTermRepository;
+    private final AcademicYearTermRepository academicYearTermRepository;
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
+    @Value("${rabbitmq.exchanges.internal}")
+    private String internalExchange;
+
+    @Value("${rabbitmq.routing-keys.internal-grade-term-fees}")
+    private String internalGradeTermFeesRoutingKey;
 
     public Long addAcademicYear(AcademicYearRequest request) {
         // Create AcademicYear entity
-        AcademicYear academicYear = AcademicYear.builder()
-                .year(getAcademicYear(request.terms()))
-                .startDate(request.terms().get(0).startDate())
-                .endDate(request.terms().get(2).endDate())
-                .build();
-        academicYearRepository.saveAndFlush(academicYear);
+        AcademicYear academicYear = academicYearRepository.saveAndFlush(
+                AcademicYear.builder()
+                .year(getAcademicYear(request.getTerms()))
+                .startDate(request.getTerms().get(0).getStartDate())
+                .endDate(request.getTerms().get(request.getTerms().size() - 1).getEndDate())
+                .build()
+        );
 
-        // Save the terms for the academic year
-        for (AcademicYearTermRequest termRequest : request.terms()) {
-            AcademicTerm academicTerm = academicTermService.getAcademicTermById(termRequest.termId());
-            AcademicYearTerm aYearTerm = AcademicYearTerm.builder()
-                    .year(academicYear)
-                    .term(academicTerm)
-                    .startDate(termRequest.startDate())
-                    .endDate(termRequest.endDate())
-                    .build();
-            aYearTermService.save(aYearTerm);
-        }
+        // Map the terms from the request and set them in the AcademicYear
+        List<AcademicYearTerm> academicYearTerms = request.getTerms().stream()
+                .map(termRequest -> AcademicYearTerm.builder()
+                            .id(new AcademicYearTermId(academicYear.getId(), termRequest.getTermId()))
+                            .year(academicYear)
+                            .term(academicTermRepository.findById(termRequest.getTermId())
+                                    .orElseThrow(() -> new RuntimeException("Academic Term not found")))
+                            .startDate(termRequest.getStartDate())
+                            .endDate(termRequest.getEndDate())
+                            .build())
+                .collect(Collectors.toList());
+
+        // Save the entire object graph in one go
+        academicYearTermRepository.saveAll(academicYearTerms);
+
+        request.setYearId(academicYear.getId());
+
+        // Publish message to RabbitMQ
+        rabbitMQMessageProducer.publish(
+                ResponseDTO.<AcademicYearRequest>builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .status(HttpStatus.OK.getReasonPhrase())
+                        .message("Add grade term fees.")
+                        .timestamp(LocalDateTime.now())
+                        .body(request)
+                        .build(),
+                internalExchange,
+                internalGradeTermFeesRoutingKey
+        );
 
         return academicYear.getId();
     }
 
     private String getAcademicYear(List<AcademicYearTermRequest> terms) {
         // Assuming the terms are ordered by termId (1, 2, 3)
-        Date startDateTerm1 = terms.get(0).startDate();
-        Date endDateTerm3 = terms.get(2).endDate();
+        Date startDateTerm1 = terms.get(0).getStartDate();
+        Date endDateTerm3 = terms.get(2).getEndDate();
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDateTerm1);

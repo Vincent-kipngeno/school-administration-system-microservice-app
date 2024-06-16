@@ -24,11 +24,10 @@ public class AcademicTerm {
             strategy = GenerationType.SEQUENCE,
             generator = "term_id_sequence"
     )
-    private Long id;
+    private Integer id;
 
     private String name;
 
     @OneToMany(mappedBy = "term")
     private List<AcademicYearTerm> terms;
 }
-

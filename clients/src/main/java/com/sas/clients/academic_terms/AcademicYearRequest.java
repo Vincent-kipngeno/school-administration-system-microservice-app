@@ -11,8 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AcademicTermResponse {
-    private Integer id;
-    private String name;
-    private List<AcademicYearTermResponse> terms;
+public class AcademicYearRequest{
+    private Long yearId;
+    private List<AcademicYearTermRequest> terms;
 }

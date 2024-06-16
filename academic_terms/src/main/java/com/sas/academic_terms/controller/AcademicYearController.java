@@ -1,9 +1,6 @@
 package com.sas.academic_terms.controller;
 
-import com.sas.academic_terms.dto.AcademicYearRequest;
-import com.sas.academic_terms.entity.AcademicYearTerm;
-import com.sas.academic_terms.entity.AcademicTerm;
-import com.sas.academic_terms.entity.AcademicYear;
+import com.sas.clients.academic_terms.AcademicYearRequest;
 import com.sas.academic_terms.service.AcademicYearTermService;
 import com.sas.academic_terms.service.AcademicTermService;
 import com.sas.academic_terms.service.AcademicYearService;
@@ -17,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -78,7 +74,7 @@ public class AcademicYearController {
     public ResponseEntity<ResponseDTO<AcademicYearTermResponse>> getAcademicYearTermById(@PathVariable Integer yearId, @PathVariable Integer termId) {
         return ResponseEntity.ok(
                 responseDTO(
-                        academicYearTermService.getAcademicYearTermById(yearId, termId),
+                        academicYearTermService.getAcademicYearTermById(Long.valueOf(yearId), termId),
                         "Academic year term returned successfully."
                 )
         );
