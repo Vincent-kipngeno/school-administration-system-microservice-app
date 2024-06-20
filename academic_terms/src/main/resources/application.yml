@@ -2,7 +2,7 @@ server:
   port: 0
 spring:
   application:
-    name: academic_terms
+    name: academicterms
   datasource:
     password: password
     url: jdbc:postgresql://localhost:5432/academic_terms

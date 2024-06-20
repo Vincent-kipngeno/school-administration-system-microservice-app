@@ -1,20 +1,20 @@
 package com.sas.clients;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class ResponseDTO<T> {
 
     private int statusCode;
     private String status;
     private String message;
-    private LocalDateTime timestamp;
+    private Long timestamp;
     private T body;
 }

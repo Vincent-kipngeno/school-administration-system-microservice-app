@@ -4,19 +4,21 @@ import com.sas.fees.dto.FeePaymentReportDTO;
 import com.sas.fees.entity.FeePayment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface FeePaymentRepository extends JpaRepository<FeePayment, Long> {
 
-    @Query("SELECT new FeePaymentReportDTO(" +
+    @Query("SELECT new com.sas.fees.dto.FeePaymentReportDTO(" +
             "f.studId, f.gradeId, f.yearId, f.termId, f.amount, g.fee, " +
             "SUM(f.amount) OVER (PARTITION BY f.studId ORDER BY f.yearId, f.termId), " +
             "SUM(g.fee) OVER (PARTITION BY f.studId ORDER BY f.yearId, f.termId), " +
             "SUM(g.fee) OVER (PARTITION BY f.studId ORDER BY f.yearId, f.termId) - " +
             "SUM(f.amount) OVER (PARTITION BY f.studId ORDER BY f.yearId, f.termId)) " +
-            "FROM FeePayment f " +
-            "JOIN GradeTermFee g ON f.gradeId = g.id.gradeId AND f.yearId = g.id.yearId AND f.termId = g.id.termId " +
+            "FROM com.sas.fees.entity.FeePayment f " +
+            "JOIN com.sas.fees.entity.GradeTermFee g ON f.gradeId = g.id.gradeId AND f.yearId = g.id.yearId AND f.termId = g.id.termId " +
             "ORDER BY f.studId, f.gradeId, f.yearId, f.termId")
     List<FeePaymentReportDTO> getFeePaymentReport();
 }

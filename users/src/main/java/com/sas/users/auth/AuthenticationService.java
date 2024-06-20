@@ -36,7 +36,7 @@ public class AuthenticationService {
 			return AuthenticationResponse.builder()
 					.token(jwtToken)
 					.build();
-		} catch (DuplicateKeyException e) {
+		} catch (Exception e) {
 			throw new EmailAlreadyExistsException("Email already exists");
 		}
 

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySources;
 
 @SpringBootApplication(
         scanBasePackages = {
-                "com.sas.users",
+                "com.sas.academic_terms",
                 "com.sas.amqp",
                 "com.sas.exception",
         }

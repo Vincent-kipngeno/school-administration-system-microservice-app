@@ -173,3 +173,8 @@ volumes:
   mongo1_config:
   mongo2_config:
   mongo3_config:
+
+# sudo lsof -i :27017
+# sudo kill 1933
+# sudo systemctl stop postgresql
+# sudo docker-compose up -d --remove-orphans

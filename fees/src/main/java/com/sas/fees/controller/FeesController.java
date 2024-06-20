@@ -31,7 +31,7 @@ public class FeesController {
                                 .statusCode(HttpStatus.CREATED.value())
                                 .status(HttpStatus.CREATED.getReasonPhrase())
                                 .message("Fee Paid.")
-                                .timestamp(LocalDateTime.now())
+                                .timestamp(System.currentTimeMillis())
                                 .body(feePayment)
                                 .build(),
                         HttpStatus.CREATED
@@ -45,7 +45,7 @@ public class FeesController {
                 .statusCode(HttpStatus.OK.value())
                 .status(HttpStatus.OK.getReasonPhrase())
                 .message("Fee payments report.")
-                .timestamp(LocalDateTime.now())
+                .timestamp(System.currentTimeMillis())
                 .body(feeReports)
                 .build();
         return ResponseEntity.ok(response);

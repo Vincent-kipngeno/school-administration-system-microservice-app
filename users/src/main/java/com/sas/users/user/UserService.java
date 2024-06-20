@@ -14,7 +14,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public List<UserResponse> getUsersByRole(String role) {
-        return userRepository.findByRolesContaining(role)
+        return userRepository.findByRoleContaining(role)
                 .stream()
                 .map(user -> UserResponse.builder()
                         .id(user.getId())

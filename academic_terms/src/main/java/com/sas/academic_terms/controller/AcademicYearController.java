@@ -30,11 +30,11 @@ public class AcademicYearController {
     private AcademicTermService academicTermService;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<Object>> addAcademicYear(@RequestBody AcademicYearRequest request) {
+    public ResponseEntity<ResponseDTO<Long>> addAcademicYear(@RequestBody AcademicYearRequest request) {
         Long academicYearId = academicYearService.addAcademicYear(request);
         return ResponseEntity.ok(
                 responseDTO(
-                        null,
+                        academicYearId,
                         "Academic year added with ID: " + academicYearId
                 )
         );
@@ -84,7 +84,7 @@ public class AcademicYearController {
     public ResponseEntity<ResponseDTO<AcademicYearResponse>> getAcademicYearById(@PathVariable Integer id) {
         return ResponseEntity.ok(
                 responseDTO(
-                        academicYearService.getAcademicYearById(id),
+                        academicYearService.getAcademicYearById(Long.valueOf(id)),
                         "Academic year terms returned successfully"
                 )
         );
@@ -105,7 +105,7 @@ public class AcademicYearController {
                 .statusCode(HttpStatus.OK.value())
                 .status(HttpStatus.OK.getReasonPhrase())
                 .message(message)
-                .timestamp(LocalDateTime.now())
+                .timestamp(System.currentTimeMillis())
                 .body(response)
                 .build();
     }

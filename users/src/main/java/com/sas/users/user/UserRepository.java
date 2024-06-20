@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends MongoRepository<User, Integer> {
 
 	Optional<User> findByEmail(String email);
-	List<User> findByRolesContaining(String role);
-	@Query("SELECT u.id FROM User u JOIN u.roles r WHERE r = :role")
+	List<User> findByRoleContaining(String role);
+	@Query("SELECT u.id FROM User u JOIN u.role r WHERE r = :role")
 	List<Long> findUserIdsByRole(@Param("role") Role role);
 }

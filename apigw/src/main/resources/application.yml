@@ -16,10 +16,19 @@ spring:
          filters:
            - AuthenticationFilter
 
+       - id: academic_terms
+         uri: lb://ACADEMICTERMS
+         predicates:
+           - Path=/academic-years/**
+         filters:
+           - AuthenticationFilter
+
        - id: users
          uri: lb://USERS
          predicates:
-           - Path=/auth/**
+           - Path=/api/v1/auth/**, /api/v1/users/**
+         filters:
+           - AuthenticationFilter
 
  application:
    name: API-GATEWAY

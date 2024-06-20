@@ -18,24 +18,31 @@ public class AuthenticationController {
 
 	private final AuthenticationService service;
 	@PostMapping("/register")
-	public ResponseEntity<ResponseDTO> register(
+	public ResponseEntity<ResponseDTO<AuthenticationResponse>> register(
 			@RequestBody RegisterRequest request
 	) {
 		AuthenticationResponse authResponse = service.register(request);
-		ResponseDTO response = ResponseDTO.builder()
+		ResponseDTO<AuthenticationResponse> response = ResponseDTO.<AuthenticationResponse>builder()
 				.statusCode(HttpStatus.OK.value())
 				.status(HttpStatus.OK.getReasonPhrase())
-				.message("List of students")
-				.timestamp(LocalDateTime.now())
+				.message("Auth Token.")
+				.timestamp(System.currentTimeMillis())
 				.body(authResponse)
 				.build();
 		return ResponseEntity.ok(response);
 	}
 	
 	@PostMapping("/authenticate")
-	public ResponseEntity<AuthenticationResponse> authenticate(
+	public ResponseEntity<ResponseDTO<AuthenticationResponse>> authenticate(
 			@RequestBody AuthenticationRequest request
 	){
-		return ResponseEntity.ok(service.authenticate(request));
+		ResponseDTO<AuthenticationResponse> response = ResponseDTO.<AuthenticationResponse>builder()
+				.statusCode(HttpStatus.OK.value())
+				.status(HttpStatus.OK.getReasonPhrase())
+				.message("Auth Token.")
+				.timestamp(System.currentTimeMillis())
+				.body(service.authenticate(request))
+				.build();
+		return ResponseEntity.ok(response);
 	}
 }

@@ -20,7 +20,10 @@ spring:
         - id: users
           uri: http://users
           predicates:
-            - Path=/auth/**
+            - Path=/api/v1/auth/**
+            - Path=/api/v1/users/**
+          filters:
+            - AuthenticationFilter
 
   application:
     name: API-GATEWAY

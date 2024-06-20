@@ -28,7 +28,7 @@ public class UserController {
                 .statusCode(HttpStatus.OK.value())
                 .status(HttpStatus.OK.getReasonPhrase())
                 .message("List of students")
-                .timestamp(LocalDateTime.now())
+                .timestamp(System.currentTimeMillis())
                 .body(students)
                 .build();
         return ResponseEntity.ok(response);

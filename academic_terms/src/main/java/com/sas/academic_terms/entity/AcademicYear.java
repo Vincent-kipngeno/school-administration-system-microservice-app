@@ -27,6 +27,7 @@ public class AcademicYear {
     )
     private Long id;
 
+    @Column(unique = true)
     private String year;
 
     @Column(name = "start_date")

@@ -1,6 +1,7 @@
 package com.sas.apigw.filter;
 
 import com.sas.apigw.util.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
     @Autowired
@@ -23,8 +25,8 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
+            log.info("route: " + exchange.getRequest().getURI().getPath());
             if (validator.isSecured.test(exchange.getRequest())) {
-                System.out.println("Hey");
                 //header contains token or not
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     throw new RuntimeException("missing authorization header");
@@ -47,7 +49,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
                 } catch (Exception e) {
                     System.out.println("invalid access...!");
-                    throw new RuntimeException("un authorized access to application");
+                    throw new RuntimeException(e.getMessage());
                 }
             }
             return chain.filter(exchange);

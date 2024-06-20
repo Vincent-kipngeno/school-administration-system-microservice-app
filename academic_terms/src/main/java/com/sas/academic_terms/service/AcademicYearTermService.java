@@ -1,5 +1,6 @@
 package com.sas.academic_terms.service;
 
+import com.sas.academic_terms.config.AcademicYearsConfiguration;
 import com.sas.academic_terms.entity.AcademicYearTerm;
 import com.sas.academic_terms.entity.AcademicYearTermId;
 import com.sas.academic_terms.repository.AcademicYearTermRepository;
@@ -7,7 +8,6 @@ import com.sas.amqp.RabbitMQMessageProducer;
 import com.sas.clients.ResponseDTO;
 import com.sas.clients.academic_terms.AcademicYearTermResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +23,7 @@ public class AcademicYearTermService {
 
     private final AcademicYearTermRepository academicYearTermRepository;
     private final RabbitMQMessageProducer rabbitMQMessageProducer;
-    @Value("${rabbitmq.exchanges.internal}")
-    private String internalExchange;
-
-    @Value("${rabbitmq.routing-keys.internal-fees}")
-    private String internalFeesRoutingKey;
+    private final AcademicYearsConfiguration academicYearsConfiguration;
 
     public AcademicYearTerm save(AcademicYearTerm aYearTerm) {
         return academicYearTermRepository.saveAndFlush(aYearTerm);
@@ -59,15 +55,15 @@ public class AcademicYearTermService {
                 .statusCode(HttpStatus.OK.value())
                 .status(HttpStatus.OK.getReasonPhrase())
                 .message("Current and Next academic year terms successfully fetched.")
-                .timestamp(LocalDateTime.now())
+                .timestamp(System.currentTimeMillis())
                 .body(Arrays.asList(currentAcademicYearTermResponse, nextAcademicYearTermResponse))
                 .build();
 
         // TODO: Send message to fees service to update fee arrears for new term
         rabbitMQMessageProducer.publish(
                 response,
-                internalExchange,
-                internalFeesRoutingKey
+                academicYearsConfiguration.getInternalExchange(),
+                academicYearsConfiguration.getInternalFeesRoutingKey()
         );
 
         return nextAcademicYearTermResponse;

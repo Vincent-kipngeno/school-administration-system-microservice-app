@@ -21,6 +21,7 @@ public class FeesConfig {
 
     @Value("${rabbitmq.routing-keys.internal-fees}")
     private String internalFeesRoutingKey;
+
     @Value("${rabbitmq.queues.grade-term-fees}")
     private String gradeTermFeesQueue;
 
@@ -47,7 +48,7 @@ public class FeesConfig {
 
     @Bean
     public Queue gradeTermFeesQueue() {
-        return new Queue(this.feesQueue);
+        return new Queue(this.gradeTermFeesQueue);
     }
 
     @Bean
