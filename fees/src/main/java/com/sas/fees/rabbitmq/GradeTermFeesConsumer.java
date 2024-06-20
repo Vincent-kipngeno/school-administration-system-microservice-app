@@ -18,7 +18,7 @@ import java.util.List;
 public class GradeTermFeesConsumer {
     private final GradeTermFeeService gradeTermFeeService;
 
-    @RabbitListener(queues = "${rabbitmq.queues.grade-term-fees}")
+    //@RabbitListener(queues = "${rabbitmq.queues.grade-term-fees}")
     public void consumer(ResponseDTO<AcademicYearRequest> responseDTO) {
         log.info("Consumed {} from queue", responseDTO);
         gradeTermFeeService.saveGradeTermFees(responseDTO.getBody());
