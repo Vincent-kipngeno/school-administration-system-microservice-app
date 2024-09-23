@@ -6,10 +6,6 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class ResponseDTO<T> {
 
     private int statusCode;

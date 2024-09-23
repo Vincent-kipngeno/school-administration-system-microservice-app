@@ -1,23 +1,22 @@
 package com.sas.academic_terms.service;
 
 import com.sas.academic_terms.config.AcademicYearsConfiguration;
-import com.sas.academic_terms.entity.AcademicYearTermId;
-import com.sas.academic_terms.repository.AcademicYearTermRepository;
-import com.sas.clients.academic_terms.AcademicYearRequest;
-import com.sas.clients.academic_terms.AcademicYearTermRequest;
-import com.sas.academic_terms.entity.AcademicYearTerm;
 import com.sas.academic_terms.entity.AcademicYear;
+import com.sas.academic_terms.entity.AcademicYearTerm;
+import com.sas.academic_terms.entity.AcademicYearTermId;
 import com.sas.academic_terms.repository.AcademicTermRepository;
 import com.sas.academic_terms.repository.AcademicYearRepository;
+import com.sas.academic_terms.repository.AcademicYearTermRepository;
 import com.sas.amqp.RabbitMQMessageProducer;
 import com.sas.clients.ResponseDTO;
+import com.sas.clients.academic_terms.AcademicYearRequest;
 import com.sas.clients.academic_terms.AcademicYearResponse;
+import com.sas.clients.academic_terms.AcademicYearTermRequest;
 import com.sas.clients.academic_terms.AcademicYearTermResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;

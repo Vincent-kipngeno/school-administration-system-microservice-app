@@ -3,10 +3,7 @@ package com.sas.fees.service;
 import com.sas.clients.academic_terms.AcademicYearRequest;
 import com.sas.fees.entity.GradeTermFee;
 import com.sas.fees.entity.GradeTermFeeId;
-import com.sas.fees.entity.TermFeeBalance;
-import com.sas.fees.entity.TermFeeBalanceId;
 import com.sas.fees.repository.GradeTermFeeRepository;
-import com.sas.fees.repository.TermFeeBalanceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
